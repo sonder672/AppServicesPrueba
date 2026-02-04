@@ -8,6 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.ConfigureLogging();
 
+builder.Services.AddApplicationInsightsTelemetry();
+
 builder.Services.AddSingleton<StressService>();
 builder.Services.AddJwtAuth(builder.Configuration);
 
