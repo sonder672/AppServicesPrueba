@@ -7,22 +7,28 @@ public static class Authenticator
 {
     public static IServiceCollection AddJwtAuth(
         this IServiceCollection services,
-        IConfiguration config)
+        IConfiguration configuration)
     {
+        var tenantId = configuration["AzureAd:TenantId"];
+        var clientId = configuration["AzureAd:ClientId"];
+
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
-                options.Authority = $"https://login.microsoftonline.com/{config["AzureAd:TenantId"]}";
-                options.Audience = config["AzureAd:Audience"];
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true
-                };
+                options.Authority =
+                    $"https://login.microsoftonline.com/{tenantId}/v2.0";
+
+                options.Audience = clientId;
+
+                options.Events = JwtBearerLoggingEvents.Create(
+                    services.BuildServiceProvider()
+                        .GetRequiredService<ILoggerFactory>()
+                        .CreateLogger("Security")
+                );
             });
 
         services.AddAuthorization();
+
         return services;
     }
 }
