@@ -21,5 +21,6 @@ var api = app.MapApi();
 api.MapHealthController();
 api.MapHelloController();
 api.MapStressController();
+api.MapExceptionController();
 
 app.Run();
