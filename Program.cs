@@ -8,15 +8,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.ConfigureLogging();
 
-builder.Services.AddApplicationInsightsTelemetry();
-
 builder.Services.AddSingleton<StressService>();
-builder.Services.AddJwtAuth(builder.Configuration);
+//builder.Services.AddJwtAuth(builder.Configuration);
 
 var app = builder.Build();
 
-app.UseAuthentication();
-app.UseAuthorization();
+//app.UseAuthentication();
+//app.UseAuthorization();
 
 var api = app.MapApi();
 
